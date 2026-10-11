@@ -1,0 +1,540 @@
+const courseData = [
+  {
+    courseCode: 'EE1001',
+    courseSession: 'C01',
+    crn: '12345',
+    courseName: 'Introduction to Electrical Engineering',
+    instructor: 'Dr. CHAN Tai Man',
+    term: 'Semester A 2025/26',
+    expectedStudyHours: 120,
+    assessmentLoad: 'High',
+    difficulty: 4,
+    gradingComponents: {
+      assignments: 30,
+      midterm: 20,
+      final: 50,
+    },
+    scheduledMeetingTimes: [
+      {
+        type: 'Class',
+        time: '12:00 pm - 2:50 pm',
+        days: 'W',
+        where: 'Li Dak Sum Yip Yio Chin A Bldg 4307',
+        scheduleType: 'Second room',
+        instructors: 'Dr. CHAN Tai Man',
+      },
+      {
+        type: 'Class',
+        time: '12:00 pm - 2:50 pm',
+        days: 'T',
+        where: 'Yeung Kin Man Acad Building P4701',
+        scheduleType: 'First room',
+        instructors: 'Dr. CHAN Tai Man',
+      },
+    ],
+    prerequisites: [],
+    description: 'Basic circuits, signals, and engineering practice.',
+  },
+  {
+    courseCode: 'EE2002',
+    courseSession: 'C01',
+    crn: '23456',
+    courseName: 'Circuit Theory',
+    instructor: 'Prof. WONG Kai',
+    term: 'Semester A 2025/26',
+    expectedStudyHours: 150,
+    assessmentLoad: 'High',
+    difficulty: 5,
+    gradingComponents: {
+      assignments: 25,
+      midterm: 25,
+      final: 50,
+    },
+    scheduledMeetingTimes: [
+      {
+        type: 'Class',
+        time: '9:30 am - 11:20 am',
+        days: 'M',
+        where: 'Academic 1 2001',
+        scheduleType: 'Main room',
+        instructors: 'Prof. WONG Kai',
+      },
+      {
+        type: 'Tutorial',
+        time: '1:30 pm - 2:20 pm',
+        days: 'F',
+        where: 'Academic 1 2512',
+        scheduleType: 'Tutorial room',
+        instructors: 'Prof. WONG Kai',
+      },
+    ],
+    prerequisites: ['EE1001'],
+    description: 'Analysis of circuits and transient responses.',
+  },
+  {
+    courseCode: 'EE3101',
+    courseSession: 'C02',
+    crn: '34567',
+    courseName: 'Signals and Systems',
+    instructor: 'Dr. LEE Siu Ming',
+    term: 'Semester A 2025/26',
+    expectedStudyHours: 180,
+    assessmentLoad: 'Very High',
+    difficulty: 5,
+    gradingComponents: {
+      assignments: 20,
+      midterm: 30,
+      final: 50,
+    },
+    scheduledMeetingTimes: [
+      {
+        type: 'Class',
+        time: '10:30 am - 12:20 pm',
+        days: 'T',
+        where: 'YEUNG Kin Man Building P4704',
+        scheduleType: 'Lecture hall',
+        instructors: 'Dr. LEE Siu Ming',
+      },
+      {
+        type: 'Lab',
+        time: '3:30 pm - 5:20 pm',
+        days: 'Th',
+        where: 'EEE Laboratory 3',
+        scheduleType: 'Lab room',
+        instructors: 'Dr. LEE Siu Ming',
+      },
+    ],
+    prerequisites: ['EE2002'],
+    description: 'Discrete and continuous systems and signal processing.',
+  },
+  {
+    courseCode: 'EE3201',
+    courseSession: 'C01',
+    crn: '45678',
+    courseName: 'Electromagnetic Fields',
+    instructor: 'Dr. TSE Mei Ling',
+    term: 'Semester B 2025/26',
+    expectedStudyHours: 135,
+    assessmentLoad: 'Moderate',
+    difficulty: 4,
+    gradingComponents: {
+      assignments: 35,
+      midterm: 15,
+      final: 50,
+    },
+    scheduledMeetingTimes: [
+      {
+        type: 'Class',
+        time: '2:30 pm - 4:20 pm',
+        days: 'W',
+        where: 'CSE Labs 1',
+        scheduleType: 'Teaching room',
+        instructors: 'Dr. TSE Mei Ling',
+      },
+      {
+        type: 'Tutorial',
+        time: '11:30 am - 12:20 pm',
+        days: 'F',
+        where: 'Academic 2 3030',
+        scheduleType: 'Tutorial room',
+        instructors: 'Dr. TSE Mei Ling',
+      },
+    ],
+    prerequisites: ['EE1001'],
+    description: 'Electromagnetic theory and field behaviour.',
+  },
+  {
+    courseCode: 'EE4213',
+    courseSession: 'C02',
+    crn: '56789',
+    courseName: 'Programming for Engineers',
+    instructor: 'Prof. CHAN Wai Yan',
+    term: 'Semester A 2025/26',
+    expectedStudyHours: 165,
+    assessmentLoad: 'High',
+    difficulty: 4,
+    gradingComponents: {
+      assignments: 40,
+      midterm: 20,
+      final: 40,
+    },
+    scheduledMeetingTimes: [
+      {
+        type: 'Class',
+        time: '1:30 pm - 3:20 pm',
+        days: 'T',
+        where: 'YEUNG Kin Man Building P4701',
+        scheduleType: 'Workshop room',
+        instructors: 'Prof. CHAN Wai Yan',
+      },
+      {
+        type: 'Lab',
+        time: '4:30 pm - 5:20 pm',
+        days: 'Th',
+        where: 'Innovation Hub 3104',
+        scheduleType: 'Lab room',
+        instructors: 'Prof. CHAN Wai Yan',
+      },
+    ],
+    prerequisites: ['EE2002'],
+    description: 'Engineering computation and practical programming in Python/C++.',
+  },
+  {
+    courseCode: 'EE4301',
+    courseSession: 'C01',
+    crn: '67890',
+    courseName: 'Power Electronics',
+    instructor: 'Dr. NG Pui Shan',
+    term: 'Semester B 2025/26',
+    expectedStudyHours: 210,
+    assessmentLoad: 'Very High',
+    difficulty: 5,
+    gradingComponents: {
+      assignments: 25,
+      midterm: 25,
+      final: 50,
+    },
+    scheduledMeetingTimes: [
+      {
+        type: 'Class',
+        time: '9:00 am - 10:50 am',
+        days: 'M',
+        where: 'Energy Centre 3402',
+        scheduleType: 'Lecture theatre',
+        instructors: 'Dr. NG Pui Shan',
+      },
+      {
+        type: 'Lab',
+        time: '11:00 am - 12:50 pm',
+        days: 'F',
+        where: 'Energy Centre 3405',
+        scheduleType: 'Lab room',
+        instructors: 'Dr. NG Pui Shan',
+      },
+    ],
+    prerequisites: ['EE3101'],
+    description: 'Power conversion, control systems, and converter design.',
+  },
+];
+
+const assessmentLoadMap = {
+  Low: 10,
+  Moderate: 20,
+  High: 30,
+  'Very High': 45,
+};
+
+const state = {
+  selectedCodes: loadSelectedCodes(),
+  sortKey: 'workloadScore',
+};
+
+const courseMap = new Map(courseData.map((course) => [course.courseCode, course]));
+
+const courseCodeInput = document.getElementById('course-codes');
+const courseList = document.getElementById('course-list');
+const comparisonTableWrapper = document.getElementById('comparison-table-wrapper');
+const timetableWrapper = document.getElementById('timetable-wrapper');
+const statusMessage = document.getElementById('status-message');
+const sortKeySelect = document.getElementById('sort-key');
+const resetButton = document.getElementById('reset-selection');
+const importButton = document.getElementById('import-timetable');
+const courseForm = document.getElementById('course-form');
+
+function loadSelectedCodes() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('courseComparisonSelection') || '[]');
+    if (Array.isArray(saved)) {
+      return saved.filter((code) => courseMap.has(code)).slice(0, 6);
+    }
+  } catch (error) {
+    console.warn('Unable to parse saved course selection', error);
+  }
+  return [];
+}
+
+function saveSelectedCodes() {
+  localStorage.setItem('courseComparisonSelection', JSON.stringify(state.selectedCodes));
+}
+
+function getWorkloadScore(course) {
+  return course.expectedStudyHours + course.difficulty * 10 + (assessmentLoadMap[course.assessmentLoad] || 0);
+}
+
+function getSortValue(course, key) {
+  switch (key) {
+    case 'expectedStudyHours':
+      return course.expectedStudyHours;
+    case 'difficulty':
+      return course.difficulty;
+    case 'assessmentLoadRank':
+      return assessmentLoadMap[course.assessmentLoad] || 0;
+    case 'courseCode':
+      return course.courseCode;
+    case 'workloadScore':
+    default:
+      return getWorkloadScore(course);
+  }
+}
+
+function compareCourses(a, b, key) {
+  const aValue = getSortValue(a, key);
+  const bValue = getSortValue(b, key);
+
+  if (typeof aValue === 'string' && typeof bValue === 'string') {
+    return aValue.localeCompare(bValue);
+  }
+
+  return Number(bValue) - Number(aValue);
+}
+
+function showStatus(message, type = 'info') {
+  statusMessage.textContent = message;
+  statusMessage.className = `status-message ${type}`;
+}
+
+function renderCourseCheckboxes() {
+  courseList.innerHTML = '';
+
+  courseData.forEach((course) => {
+    const wrapper = document.createElement('label');
+    wrapper.className = 'course-option';
+
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.checked = state.selectedCodes.includes(course.courseCode);
+    input.value = course.courseCode;
+    input.setAttribute('aria-label', `Select ${course.courseCode}`);
+
+    input.addEventListener('change', (event) => {
+      const { value, checked } = event.target;
+      const next = new Set(state.selectedCodes);
+      if (checked) {
+        next.add(value);
+      } else {
+        next.delete(value);
+      }
+      state.selectedCodes = [...next];
+      saveSelectedCodes();
+      renderCourseCheckboxes();
+      updateComparison();
+    });
+
+    const labelText = document.createElement('span');
+    labelText.className = 'course-option-label';
+    labelText.innerHTML = `
+      <strong>${course.courseCode}</strong>
+      <span>${course.courseName}</span>
+    `;
+
+    wrapper.append(input, labelText);
+    courseList.appendChild(wrapper);
+  });
+}
+
+function parseCourseInput(value) {
+  return value
+    .split(/[\n,]+/)
+    .map((part) => part.trim().toUpperCase())
+    .filter(Boolean);
+}
+
+function addCourseCodes() {
+  const parsed = parseCourseInput(courseCodeInput.value);
+
+  if (!parsed.length) {
+    showStatus('Course code not found.', 'error');
+    return;
+  }
+
+  const validCodes = [];
+  const invalidCodes = [];
+
+  parsed.forEach((code) => {
+    if (courseMap.has(code)) {
+      validCodes.push(code);
+    } else {
+      invalidCodes.push(code);
+    }
+  });
+
+  if (validCodes.length) {
+    state.selectedCodes = [...new Set([...state.selectedCodes, ...validCodes])];
+    saveSelectedCodes();
+    renderCourseCheckboxes();
+    courseCodeInput.value = '';
+  }
+
+  if (invalidCodes.length) {
+    showStatus(`Course code not found: ${invalidCodes.join(', ')}`, 'error');
+  } else {
+    showStatus(`Loaded ${validCodes.length} course${validCodes.length > 1 ? 's' : ''}.`, 'success');
+  }
+
+  updateComparison();
+}
+
+function importTimetableSelection() {
+  const sampleCodes = ['EE1001', 'EE2002', 'EE4213', 'EE4301'];
+  state.selectedCodes = sampleCodes.filter((code) => courseMap.has(code));
+  saveSelectedCodes();
+  renderCourseCheckboxes();
+  showStatus('Imported a mock timetable selection.', 'success');
+  updateComparison();
+}
+
+function resetSelection() {
+  state.selectedCodes = [];
+  saveSelectedCodes();
+  renderCourseCheckboxes();
+  showStatus('Selection cleared. Choose at least two courses to compare.', 'info');
+  updateComparison();
+}
+
+function getSortedSelectedCourses() {
+  const selectedCourses = state.selectedCodes
+    .map((code) => courseMap.get(code))
+    .filter(Boolean)
+    .sort((a, b) => compareCourses(a, b, state.sortKey));
+
+  return selectedCourses;
+}
+
+function formatGrading(gradingComponents) {
+  return Object.entries(gradingComponents)
+    .map(([key, value]) => `${key[0].toUpperCase() + key.slice(1)} ${value}%`)
+    .join(' • ');
+}
+
+function renderComparisonTable(courses) {
+  const highestCourse = courses.reduce((top, course) => {
+    return getWorkloadScore(course) > getWorkloadScore(top) ? course : top;
+  }, courses[0]);
+  const highestScore = getWorkloadScore(highestCourse);
+
+  const rows = [
+    { label: 'Course code', value: (course) => course.courseCode },
+    { label: 'Course name', value: (course) => course.courseName },
+    { label: 'Instructor', value: (course) => course.instructor },
+    { label: 'Term', value: (course) => course.term },
+    { label: 'Expected study hours', value: (course) => `${course.expectedStudyHours} hrs` },
+    { label: 'Assessment load', value: (course) => course.assessmentLoad },
+    { label: 'Difficulty', value: (course) => `${course.difficulty}/5` },
+    { label: 'Grading components', value: (course) => formatGrading(course.gradingComponents) },
+    { label: 'Workload score', value: (course) => `${getWorkloadScore(course)}` },
+  ];
+
+  const headerCells = courses
+    .map(
+      (course) => `
+        <th>
+          <div class="course-header">
+            <span>${course.courseCode}</span>
+            ${course.courseCode === highestCourse.courseCode ? '<span class="course-badge top">Highest workload</span>' : '<span class="course-badge">Course</span>'}
+          </div>
+        </th>
+      `,
+    )
+    .join('');
+
+  const sectionRows = rows
+    .map((row) => {
+      const cells = courses
+        .map((course) => {
+          const renderedValue = row.value(course);
+          const isTop = course.courseCode === highestCourse.courseCode && row.label === 'Workload score';
+          return `<td class="${isTop ? 'metric-highlight top' : ''}">${renderedValue}</td>`;
+        })
+        .join('');
+
+      return `
+        <tr>
+          <th>${row.label}</th>
+          ${cells}
+        </tr>
+      `;
+    })
+    .join('');
+
+  comparisonTableWrapper.innerHTML = `
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          ${headerCells}
+        </tr>
+      </thead>
+      <tbody>
+        ${sectionRows}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderTimetable(courses) {
+  if (!courses.length) {
+    timetableWrapper.innerHTML = '<div class="empty-state">Select at least two courses to preview a timetable.</div>';
+    return;
+  }
+
+  const cards = courses
+    .map((course) => {
+      const items = course.scheduledMeetingTimes
+        .map(
+          (slot) => `
+            <li>
+              <span><strong>${slot.type}</strong> • ${slot.days}</span>
+              <span>${slot.time}</span>
+              <span>${slot.where}</span>
+            </li>
+          `,
+        )
+        .join('');
+
+      return `
+        <div class="timetable-card">
+          <h4>${course.courseCode} — ${course.courseName}</h4>
+          <ul class="schedule-list">${items}</ul>
+        </div>
+      `;
+    })
+    .join('');
+
+  timetableWrapper.innerHTML = cards;
+}
+
+function updateComparison() {
+  const selectedCourses = getSortedSelectedCourses();
+
+  if (selectedCourses.length < 2) {
+    comparisonTableWrapper.innerHTML = '<div class="empty-state">Select at least two courses to compare.</div>';
+    renderTimetable([]);
+    return;
+  }
+
+  renderComparisonTable(selectedCourses);
+  renderTimetable(selectedCourses);
+}
+
+courseForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  addCourseCodes();
+});
+
+sortKeySelect.addEventListener('change', (event) => {
+  state.sortKey = event.target.value;
+  updateComparison();
+});
+
+resetButton.addEventListener('click', resetSelection);
+importButton.addEventListener('click', importTimetableSelection);
+
+sortKeySelect.value = state.sortKey;
+renderCourseCheckboxes();
+updateComparison();
+
+if (state.selectedCodes.length) {
+  showStatus(`${state.selectedCodes.length} course${state.selectedCodes.length > 1 ? 's' : ''} selected.`, 'success');
+} else {
+  showStatus('Select at least two courses to compare.', 'info');
+}
