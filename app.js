@@ -5,7 +5,7 @@ const courseData = [
     crn: '12345',
     courseName: 'Introduction to Electrical Engineering',
     instructor: 'Dr. CHAN Tai Man',
-    term: 'Semester A 2025/26',
+    term: 'Semester A 2026/27',
     expectedStudyHours: 120,
     assessmentLoad: 'High',
     difficulty: 4,
@@ -41,7 +41,7 @@ const courseData = [
     crn: '23456',
     courseName: 'Circuit Theory',
     instructor: 'Prof. WONG Kai',
-    term: 'Semester A 2025/26',
+    term: 'Semester A 2026/27',
     expectedStudyHours: 150,
     assessmentLoad: 'High',
     difficulty: 5,
@@ -77,7 +77,7 @@ const courseData = [
     crn: '34567',
     courseName: 'Signals and Systems',
     instructor: 'Dr. LEE Siu Ming',
-    term: 'Semester A 2025/26',
+    term: 'Semester A 2026/27',
     expectedStudyHours: 180,
     assessmentLoad: 'Very High',
     difficulty: 5,
@@ -113,7 +113,7 @@ const courseData = [
     crn: '45678',
     courseName: 'Electromagnetic Fields',
     instructor: 'Dr. TSE Mei Ling',
-    term: 'Semester B 2025/26',
+    term: 'Semester A 2026/27',
     expectedStudyHours: 135,
     assessmentLoad: 'Moderate',
     difficulty: 4,
@@ -149,7 +149,7 @@ const courseData = [
     crn: '56789',
     courseName: 'Programming for Engineers',
     instructor: 'Prof. CHAN Wai Yan',
-    term: 'Semester A 2025/26',
+    term: 'Semester A 2026/27',
     expectedStudyHours: 165,
     assessmentLoad: 'High',
     difficulty: 4,
@@ -185,7 +185,7 @@ const courseData = [
     crn: '67890',
     courseName: 'Power Electronics',
     instructor: 'Dr. NG Pui Shan',
-    term: 'Semester B 2025/26',
+    term: 'Semester A 2026/27',
     expectedStudyHours: 210,
     assessmentLoad: 'Very High',
     difficulty: 5,
@@ -215,7 +215,124 @@ const courseData = [
     prerequisites: ['EE3101'],
     description: 'Power conversion, control systems, and converter design.',
   },
+  {
+    courseCode: 'EE2201',
+    courseSession: 'C01',
+    crn: '78901',
+    courseName: 'Electronic Devices and Circuits',
+    instructor: 'Dr. LAM Ho Yin',
+    term: 'Semester A 2026/27',
+    expectedStudyHours: 145,
+    assessmentLoad: 'High',
+    difficulty: 4,
+    gradingComponents: {
+      assignments: 30,
+      midterm: 20,
+      final: 50,
+    },
+    scheduledMeetingTimes: [
+      {
+        type: 'Class',
+        time: '10:00 am - 11:50 am',
+        days: 'W',
+        where: 'YEUNG Kin Man Building P4701',
+        scheduleType: 'Lecture room',
+        instructors: 'Dr. LAM Ho Yin',
+      },
+      {
+        type: 'Tutorial',
+        time: '2:30 pm - 3:20 pm',
+        days: 'F',
+        where: 'Academic 2 3505',
+        scheduleType: 'Tutorial room',
+        instructors: 'Dr. LAM Ho Yin',
+      },
+    ],
+    prerequisites: ['EE1001'],
+    description: 'Semiconductor devices, analog circuits, and circuit applications.',
+  },
+  {
+    courseCode: 'EE3302',
+    courseSession: 'C01',
+    crn: '89012',
+    courseName: 'Control Systems',
+    instructor: 'Prof. HO Chun Kit',
+    term: 'Semester A 2026/27',
+    expectedStudyHours: 170,
+    assessmentLoad: 'High',
+    difficulty: 4,
+    gradingComponents: {
+      assignments: 25,
+      midterm: 25,
+      final: 50,
+    },
+    scheduledMeetingTimes: [
+      {
+        type: 'Class',
+        time: '11:00 am - 12:50 pm',
+        days: 'M',
+        where: 'Academic 1 2102',
+        scheduleType: 'Lecture room',
+        instructors: 'Prof. HO Chun Kit',
+      },
+      {
+        type: 'Tutorial',
+        time: '3:30 pm - 4:20 pm',
+        days: 'W',
+        where: 'YEUNG Kin Man Building P4704',
+        scheduleType: 'Tutorial room',
+        instructors: 'Prof. HO Chun Kit',
+      },
+    ],
+    prerequisites: ['EE2002'],
+    description: 'Feedback, stability, and design methods for dynamic systems.',
+  },
+  {
+    courseCode: 'EE4402',
+    courseSession: 'C01',
+    crn: '90123',
+    courseName: 'Renewable Energy Systems',
+    instructor: 'Dr. AU Ka Man',
+    term: 'Semester A 2026/27',
+    expectedStudyHours: 155,
+    assessmentLoad: 'Moderate',
+    difficulty: 3,
+    gradingComponents: {
+      assignments: 35,
+      project: 25,
+      final: 40,
+    },
+    scheduledMeetingTimes: [
+      {
+        type: 'Class',
+        time: '2:00 pm - 3:50 pm',
+        days: 'Th',
+        where: 'Energy Centre 3402',
+        scheduleType: 'Lecture room',
+        instructors: 'Dr. AU Ka Man',
+      },
+      {
+        type: 'Project',
+        time: '10:00 am - 11:50 am',
+        days: 'F',
+        where: 'Energy Centre 3405',
+        scheduleType: 'Project room',
+        instructors: 'Dr. AU Ka Man',
+      },
+    ],
+    prerequisites: ['EE3201'],
+    description: 'Renewable generation, storage, and grid integration.',
+  },
 ];
+
+const semesterPresets = {
+  '2A': ['EE1001', 'EE2002', 'EE2201'],
+  '2B': ['EE1001', 'EE2201', 'EE3201', 'EE3302'],
+  '3A': ['EE2002', 'EE3101', 'EE3201', 'EE3302'],
+  '3B': ['EE3101', 'EE3302', 'EE4213', 'EE4301'],
+  '4A': ['EE3101', 'EE4213', 'EE4301', 'EE4402'],
+  '4B': ['EE3201', 'EE4213', 'EE4301', 'EE4402'],
+};
 
 const assessmentLoadMap = {
   Low: 10,
@@ -239,6 +356,7 @@ const statusMessage = document.getElementById('status-message');
 const sortKeySelect = document.getElementById('sort-key');
 const resetButton = document.getElementById('reset-selection');
 const importButton = document.getElementById('import-timetable');
+const semesterPresetSelect = document.getElementById('semester-preset');
 const courseForm = document.getElementById('course-form');
 
 function loadSelectedCodes() {
@@ -375,11 +493,11 @@ function addCourseCodes() {
 }
 
 function importTimetableSelection() {
-  const sampleCodes = ['EE1001', 'EE2002', 'EE4213', 'EE4301'];
+  const sampleCodes = semesterPresets[semesterPresetSelect.value];
   state.selectedCodes = sampleCodes.filter((code) => courseMap.has(code));
   saveSelectedCodes();
   renderCourseCheckboxes();
-  showStatus('Imported a mock timetable selection.', 'success');
+  showStatus(`Loaded the Semester ${semesterPresetSelect.value} mock timetable preset.`, 'success');
   updateComparison();
 }
 
@@ -584,7 +702,6 @@ function renderComparisonTable(courses) {
     { label: 'Course code', value: (course) => course.courseCode },
     { label: 'Course name', value: (course) => course.courseName },
     { label: 'Instructor', value: (course) => course.instructor },
-    { label: 'Term', value: (course) => course.term },
     { label: 'Expected study hours', value: (course) => `${course.expectedStudyHours} hrs` },
     { label: 'Assessment load', value: (course) => course.assessmentLoad },
     { label: 'Difficulty', value: (course) => `${course.difficulty}/5` },

@@ -109,6 +109,22 @@ h1 {
   gap: 14px;
 }
 
+.preset-controls {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.preset-controls > label {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.preset-controls .button-row select {
+  flex: 1;
+}
+
 textarea {
   width: 100%;
   resize: vertical;
