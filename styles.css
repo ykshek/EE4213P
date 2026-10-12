@@ -344,6 +344,57 @@ select {
   color: var(--success);
 }
 
+.grading-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 135px;
+}
+
+.grading-pie {
+  display: block;
+  flex: 0 0 76px;
+  width: 76px;
+  height: 76px;
+  border: 1px solid rgba(31, 42, 55, 0.16);
+  border-radius: 50%;
+  background: var(--grading-pie);
+}
+
+.grading-legend {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.75rem;
+}
+
+.grading-legend li {
+  display: grid;
+  grid-template-columns: 9px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 5px;
+}
+
+.grading-legend li > span:nth-child(2) {
+  overflow-wrap: anywhere;
+}
+
+.grading-legend-color {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--component-color);
+}
+
+.grading-legend strong {
+  font-variant-numeric: tabular-nums;
+}
+
 .timetable-block {
   margin-top: 22px;
 }

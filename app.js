@@ -518,10 +518,43 @@ function getSortedSelectedCourses() {
   return selectedCourses;
 }
 
-function formatGrading(gradingComponents) {
-  return Object.entries(gradingComponents)
-    .map(([key, value]) => `${key[0].toUpperCase() + key.slice(1)} ${value}%`)
-    .join(' • ');
+function renderGradingChart(course) {
+  const colors = ['#2d5bff', '#f97316', '#16a085', '#a855f7', '#e11d48'];
+  const components = Object.entries(course.gradingComponents);
+  const total = components.reduce((sum, [, value]) => sum + value, 0);
+  let accumulated = 0;
+  const slices = components.map(([name, value], index) => {
+    const start = (accumulated / total) * 100;
+    accumulated += value;
+    const end = (accumulated / total) * 100;
+    return `${colors[index % colors.length]} ${start}% ${end}%`;
+  });
+  const description = components
+    .map(([name, value]) => `${name[0].toUpperCase() + name.slice(1)} ${value}%`)
+    .join(', ');
+  const legend = components
+    .map(
+      ([name, value], index) => `
+        <li>
+          <span class="grading-legend-color" style="--component-color: ${colors[index % colors.length]}" aria-hidden="true"></span>
+          <span>${name[0].toUpperCase() + name.slice(1)}</span>
+          <strong>${value}%</strong>
+        </li>
+      `,
+    )
+    .join('');
+
+  return `
+    <div class="grading-chart">
+      <span
+        class="grading-pie"
+        role="img"
+        aria-label="${course.courseCode} grading components: ${description}"
+        style="--grading-pie: conic-gradient(${slices.join(', ')})"
+      ></span>
+      <ul class="grading-legend" aria-label="Grading component breakdown">${legend}</ul>
+    </div>
+  `;
 }
 
 const timetableDays = [
@@ -705,7 +738,7 @@ function renderComparisonTable(courses) {
     { label: 'Expected study hours', value: (course) => `${course.expectedStudyHours} hrs` },
     { label: 'Assessment load', value: (course) => course.assessmentLoad },
     { label: 'Difficulty', value: (course) => `${course.difficulty}/5` },
-    { label: 'Grading components', value: (course) => formatGrading(course.gradingComponents) },
+    { label: 'Grading components', value: renderGradingChart },
     { label: 'Workload score', value: (course) => `${getWorkloadScore(course)}` },
   ];
 
@@ -742,7 +775,7 @@ function renderComparisonTable(courses) {
     .join('');
 
   comparisonTableWrapper.innerHTML = `
-    <table class="comparison-table">
+    <table class="comparison-table" style="min-width: ${Math.max(720, 170 + courses.length * 180)}px">
       <thead>
         <tr>
           <th>Metric</th>
