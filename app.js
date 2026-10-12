@@ -6,7 +6,7 @@ const courseData = [
     courseName: 'Introduction to Electrical Engineering',
     instructor: 'Dr. CHAN Tai Man',
     term: 'Semester A 2026/27',
-    expectedStudyHours: 120,
+    expectedStudyHoursPerWeek: 8,
     assessmentLoad: 'High',
     difficulty: 4,
     gradingComponents: {
@@ -42,7 +42,7 @@ const courseData = [
     courseName: 'Circuit Theory',
     instructor: 'Prof. WONG Kai',
     term: 'Semester A 2026/27',
-    expectedStudyHours: 150,
+    expectedStudyHoursPerWeek: 10,
     assessmentLoad: 'High',
     difficulty: 5,
     gradingComponents: {
@@ -78,7 +78,7 @@ const courseData = [
     courseName: 'Signals and Systems',
     instructor: 'Dr. LEE Siu Ming',
     term: 'Semester A 2026/27',
-    expectedStudyHours: 180,
+    expectedStudyHoursPerWeek: 12,
     assessmentLoad: 'Very High',
     difficulty: 5,
     gradingComponents: {
@@ -114,7 +114,7 @@ const courseData = [
     courseName: 'Electromagnetic Fields',
     instructor: 'Dr. TSE Mei Ling',
     term: 'Semester A 2026/27',
-    expectedStudyHours: 135,
+    expectedStudyHoursPerWeek: 9,
     assessmentLoad: 'Moderate',
     difficulty: 4,
     gradingComponents: {
@@ -150,7 +150,7 @@ const courseData = [
     courseName: 'Programming for Engineers',
     instructor: 'Prof. CHAN Wai Yan',
     term: 'Semester A 2026/27',
-    expectedStudyHours: 165,
+    expectedStudyHoursPerWeek: 11,
     assessmentLoad: 'High',
     difficulty: 4,
     gradingComponents: {
@@ -186,7 +186,7 @@ const courseData = [
     courseName: 'Power Electronics',
     instructor: 'Dr. NG Pui Shan',
     term: 'Semester A 2026/27',
-    expectedStudyHours: 210,
+    expectedStudyHoursPerWeek: 14,
     assessmentLoad: 'Very High',
     difficulty: 5,
     gradingComponents: {
@@ -222,7 +222,7 @@ const courseData = [
     courseName: 'Electronic Devices and Circuits',
     instructor: 'Dr. LAM Ho Yin',
     term: 'Semester A 2026/27',
-    expectedStudyHours: 145,
+    expectedStudyHoursPerWeek: 10,
     assessmentLoad: 'High',
     difficulty: 4,
     gradingComponents: {
@@ -258,7 +258,7 @@ const courseData = [
     courseName: 'Control Systems',
     instructor: 'Prof. HO Chun Kit',
     term: 'Semester A 2026/27',
-    expectedStudyHours: 170,
+    expectedStudyHoursPerWeek: 11,
     assessmentLoad: 'High',
     difficulty: 4,
     gradingComponents: {
@@ -294,7 +294,7 @@ const courseData = [
     courseName: 'Renewable Energy Systems',
     instructor: 'Dr. AU Ka Man',
     term: 'Semester A 2026/27',
-    expectedStudyHours: 155,
+    expectedStudyHoursPerWeek: 10,
     assessmentLoad: 'Moderate',
     difficulty: 3,
     gradingComponents: {
@@ -376,13 +376,13 @@ function saveSelectedCodes() {
 }
 
 function getWorkloadScore(course) {
-  return course.expectedStudyHours + course.difficulty * 10 + (assessmentLoadMap[course.assessmentLoad] || 0);
+  return course.expectedStudyHoursPerWeek + course.difficulty * 10 + (assessmentLoadMap[course.assessmentLoad] || 0);
 }
 
 function getSortValue(course, key) {
   switch (key) {
-    case 'expectedStudyHours':
-      return course.expectedStudyHours;
+    case 'expectedStudyHoursPerWeek':
+      return course.expectedStudyHoursPerWeek;
     case 'difficulty':
       return course.difficulty;
     case 'assessmentLoadRank':
@@ -735,7 +735,7 @@ function renderComparisonTable(courses) {
     { label: 'Course code', value: (course) => course.courseCode },
     { label: 'Course name', value: (course) => course.courseName },
     { label: 'Instructor', value: (course) => course.instructor },
-    { label: 'Expected study hours', value: (course) => `${course.expectedStudyHours} hrs` },
+    { label: 'Expected study hours per week', value: (course) => `${course.expectedStudyHoursPerWeek} hrs/week` },
     { label: 'Assessment load', value: (course) => course.assessmentLoad },
     { label: 'Difficulty', value: (course) => `${course.difficulty}/5` },
     { label: 'Grading components', value: renderGradingChart },
