@@ -550,6 +550,30 @@ function getDayEvents(courses, dayKey) {
   return events;
 }
 
+function findTimetableConflicts(events, day) {
+  const conflicts = [];
+
+  events.forEach((event, index) => {
+    events.slice(index + 1).forEach((otherEvent) => {
+      if (
+        event.course.courseCode === otherEvent.course.courseCode ||
+        event.start >= otherEvent.end ||
+        otherEvent.start >= event.end
+      ) {
+        return;
+      }
+
+      event.conflict = true;
+      otherEvent.conflict = true;
+      conflicts.push(
+        `${day.label}: ${event.course.courseCode} (${event.time}) overlaps ${otherEvent.course.courseCode} (${otherEvent.time})`,
+      );
+    });
+  });
+
+  return conflicts;
+}
+
 function renderComparisonTable(courses) {
   const highestCourse = courses.reduce((top, course) => {
     return getWorkloadScore(course) > getWorkloadScore(top) ? course : top;
@@ -625,10 +649,13 @@ function renderTimetable(courses) {
     const hour = 8 + index;
     return `<div class="timetable-time-slot">${String(hour).padStart(2, '0')}:00-${String(hour).padStart(2, '0')}:50</div>`;
   }).join('');
+  const conflicts = [];
   const dayColumns = timetableDays
     .map((day) => {
       const slots = Array.from({ length: timetableSlotCount }, () => '<div class="timetable-hour-slot" aria-hidden="true"></div>').join('');
-      const events = getDayEvents(courses, day.key)
+      const dayEvents = getDayEvents(courses, day.key);
+      conflicts.push(...findTimetableConflicts(dayEvents, day));
+      const events = dayEvents
         .map((event) => {
           const visibleMinutes = timetableEndMinutes - timetableStartMinutes;
           const top = ((event.start - timetableStartMinutes) / visibleMinutes) * 100;
@@ -644,7 +671,7 @@ function renderTimetable(courses) {
 
           return `
             <article
-              class="timetable-event color-${colorIndex}"
+              class="timetable-event color-${colorIndex}${event.conflict ? ' timetable-event-conflict' : ''}"
               style="--event-top: ${top}%; --event-height: ${height}%; --event-left: ${left}%; --event-width: ${width}%"
               title="${event.course.courseCode} ${event.type} • ${event.days} ${event.time} • ${event.where}"
               aria-label="${event.course.courseCode} ${event.type}, ${event.days}, ${event.time}, ${event.where}"
@@ -666,8 +693,17 @@ function renderTimetable(courses) {
   const headers = timetableDays
     .map((day) => `<div class="timetable-day-header" role="columnheader">${day.label}</div>`)
     .join('');
+  const warning = conflicts.length
+    ? `
+      <aside class="timetable-warning" role="alert">
+        <strong>Schedule conflict${conflicts.length > 1 ? 's' : ''} detected</strong>
+        <ul>${conflicts.map((conflict) => `<li>${conflict}</li>`).join('')}</ul>
+      </aside>
+    `
+    : '';
 
   timetableWrapper.innerHTML = `
+    ${warning}
     <div class="timetable-grid" role="grid" aria-label="Weekly course timetable">
       <div class="timetable-corner" role="columnheader">Time</div>
       ${headers}
