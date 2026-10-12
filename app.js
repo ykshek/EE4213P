@@ -406,6 +406,150 @@ function formatGrading(gradingComponents) {
     .join(' • ');
 }
 
+const timetableDays = [
+  { key: 'M', label: 'Monday' },
+  { key: 'T', label: 'Tuesday' },
+  { key: 'W', label: 'Wednesday' },
+  { key: 'Th', label: 'Thursday' },
+  { key: 'F', label: 'Friday' },
+  { key: 'Sa', label: 'Saturday' },
+  { key: 'Su', label: 'Sunday' },
+];
+const timetableStartMinutes = 8 * 60;
+const timetableEndMinutes = 23 * 60;
+const timetableSlotCount = (timetableEndMinutes - timetableStartMinutes) / 60;
+
+function parseMeetingTime(timeRange) {
+  const times = [...timeRange.matchAll(/(\d{1,2}):(\d{2})\s*(am|pm)?/gi)];
+  if (times.length < 2) {
+    return null;
+  }
+
+  const toMinutes = (match) => {
+    let hours = Number(match[1]);
+    const minutes = Number(match[2]);
+    const meridiem = match[3]?.toLowerCase();
+
+    if (meridiem) {
+      hours %= 12;
+      if (meridiem === 'pm') {
+        hours += 12;
+      }
+    }
+
+    return hours * 60 + minutes;
+  };
+
+  const start = toMinutes(times[0]);
+  let end = toMinutes(times[1]);
+  if (end <= start) {
+    end += 24 * 60;
+  }
+
+  if (start >= timetableEndMinutes || end <= timetableStartMinutes) {
+    return null;
+  }
+
+  return {
+    start: Math.max(start, timetableStartMinutes),
+    end: Math.min(end, timetableEndMinutes),
+  };
+}
+
+function normalizeMeetingDays(value) {
+  const dayMap = {
+    m: 'M',
+    mo: 'M',
+    mon: 'M',
+    monday: 'M',
+    t: 'T',
+    tu: 'T',
+    tue: 'T',
+    tues: 'T',
+    tuesday: 'T',
+    w: 'W',
+    we: 'W',
+    wed: 'W',
+    wednesday: 'W',
+    th: 'Th',
+    thu: 'Th',
+    thur: 'Th',
+    thurs: 'Th',
+    thursday: 'Th',
+    f: 'F',
+    fr: 'F',
+    fri: 'F',
+    friday: 'F',
+    sa: 'Sa',
+    sat: 'Sa',
+    saturday: 'Sa',
+    su: 'Su',
+    sun: 'Su',
+    sunday: 'Su',
+  };
+  const tokens = String(value)
+    .trim()
+    .split(/[\s,/&]+/)
+    .filter(Boolean);
+  const days = new Set();
+
+  tokens.forEach((token) => {
+    const normalized = token.toLowerCase();
+    if (dayMap[normalized]) {
+      days.add(dayMap[normalized]);
+      return;
+    }
+
+    const compactToken = normalized.replace(/[^a-z]/g, '');
+    const abbreviations = compactToken.match(/th|tu|sa|su|m|t|w|f/g) || [];
+    abbreviations.forEach((abbreviation) => {
+      if (dayMap[abbreviation]) {
+        days.add(dayMap[abbreviation]);
+      }
+    });
+  });
+
+  return [...days];
+}
+
+function getDayEvents(courses, dayKey) {
+  const events = [];
+
+  courses.forEach((course, courseIndex) => {
+    course.scheduledMeetingTimes.forEach((meeting) => {
+      const time = parseMeetingTime(meeting.time);
+      if (!time || !normalizeMeetingDays(meeting.days).includes(dayKey)) {
+        return;
+      }
+
+      events.push({
+        ...meeting,
+        ...time,
+        course,
+        courseIndex,
+      });
+    });
+  });
+
+  events.sort((a, b) => a.start - b.start || a.end - b.end);
+
+  const laneEnds = [];
+  events.forEach((event) => {
+    let lane = laneEnds.findIndex((end) => end <= event.start);
+    if (lane === -1) {
+      lane = laneEnds.length;
+    }
+    laneEnds[lane] = event.end;
+    event.lane = lane;
+  });
+
+  events.forEach((event) => {
+    event.laneCount = Math.max(laneEnds.length, 1);
+  });
+
+  return events;
+}
+
 function renderComparisonTable(courses) {
   const highestCourse = courses.reduce((top, course) => {
     return getWorkloadScore(course) > getWorkloadScore(top) ? course : top;
@@ -477,30 +621,60 @@ function renderTimetable(courses) {
     return;
   }
 
-  const cards = courses
-    .map((course) => {
-      const items = course.scheduledMeetingTimes
-        .map(
-          (slot) => `
-            <li>
-              <span><strong>${slot.type}</strong> • ${slot.days}</span>
-              <span>${slot.time}</span>
-              <span>${slot.where}</span>
-            </li>
-          `,
-        )
+  const timeLabels = Array.from({ length: timetableSlotCount }, (_, index) => {
+    const hour = 8 + index;
+    return `<div class="timetable-time-slot">${String(hour).padStart(2, '0')}:00-${String(hour).padStart(2, '0')}:50</div>`;
+  }).join('');
+  const dayColumns = timetableDays
+    .map((day) => {
+      const slots = Array.from({ length: timetableSlotCount }, () => '<div class="timetable-hour-slot" aria-hidden="true"></div>').join('');
+      const events = getDayEvents(courses, day.key)
+        .map((event) => {
+          const visibleMinutes = timetableEndMinutes - timetableStartMinutes;
+          const top = ((event.start - timetableStartMinutes) / visibleMinutes) * 100;
+          const height = ((event.end - event.start) / visibleMinutes) * 100;
+          const colorIndex = event.courseIndex % 6;
+          const left = (event.lane / event.laneCount) * 100;
+          const width = 100 / event.laneCount;
+          const details = [
+            event.course.crn,
+            `${event.course.courseCode}-${event.course.courseSession}`,
+            event.where,
+          ].filter(Boolean);
+
+          return `
+            <article
+              class="timetable-event color-${colorIndex}"
+              style="--event-top: ${top}%; --event-height: ${height}%; --event-left: ${left}%; --event-width: ${width}%"
+              title="${event.course.courseCode} ${event.type} • ${event.days} ${event.time} • ${event.where}"
+              aria-label="${event.course.courseCode} ${event.type}, ${event.days}, ${event.time}, ${event.where}"
+            >
+              ${details.map((detail) => `<span>${detail}</span>`).join('')}
+            </article>
+          `;
+        })
         .join('');
 
       return `
-        <div class="timetable-card">
-          <h4>${course.courseCode} — ${course.courseName}</h4>
-          <ul class="schedule-list">${items}</ul>
-        </div>
+        <section class="timetable-day-column" aria-label="${day.label} schedule">
+          <div class="timetable-hour-slots" aria-hidden="true">${slots}</div>
+          <div class="timetable-events">${events}</div>
+        </section>
       `;
     })
     .join('');
+  const headers = timetableDays
+    .map((day) => `<div class="timetable-day-header" role="columnheader">${day.label}</div>`)
+    .join('');
 
-  timetableWrapper.innerHTML = cards;
+  timetableWrapper.innerHTML = `
+    <div class="timetable-grid" role="grid" aria-label="Weekly course timetable">
+      <div class="timetable-corner" role="columnheader">Time</div>
+      ${headers}
+      <div class="timetable-time-axis" aria-hidden="true">${timeLabels}</div>
+      ${dayColumns}
+    </div>
+  `;
 }
 
 function updateComparison() {

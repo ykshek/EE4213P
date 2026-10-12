@@ -333,38 +333,127 @@ select {
 }
 
 .timetable-wrapper {
+  overflow-x: auto;
+  border: 1px solid #9aa0a6;
+  padding: 3px;
+  background: #f3f1dc;
+}
+
+.timetable-grid {
+  --timetable-slot-height: 48px;
+  --timetable-slot-gap: 3px;
+  --timetable-day-height: 762px;
   display: grid;
-  gap: 12px;
+  grid-template-columns: 102px repeat(7, minmax(122px, 1fr));
+  grid-template-rows: 40px var(--timetable-day-height);
+  gap: var(--timetable-slot-gap);
+  min-width: 1050px;
+  background: #a7a7a7;
 }
 
-.timetable-card {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: #f8fbff;
-  padding: 14px 16px;
-}
-
-.timetable-card h4 {
-  margin: 0 0 10px;
-}
-
-.schedule-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 8px;
-}
-
-.schedule-list li {
+.timetable-corner,
+.timetable-day-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: space-between;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: white;
-  border: 1px solid var(--border);
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: #17d9df;
+  color: #111827;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.timetable-time-axis,
+.timetable-day-column {
+  grid-row: 2;
+  height: var(--timetable-day-height);
+  min-height: 0;
+}
+
+.timetable-time-axis,
+.timetable-hour-slots {
+  display: grid;
+  grid-template-rows: repeat(15, minmax(0, 1fr));
+  gap: var(--timetable-slot-gap);
+}
+
+.timetable-time-slot,
+.timetable-hour-slot {
+  min-height: 0;
+  border: 1px solid #aaa99f;
+  background: #ffffd5;
+}
+
+.timetable-time-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  color: #243044;
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.timetable-day-column {
+  position: relative;
+}
+
+.timetable-hour-slots,
+.timetable-events {
+  position: absolute;
+  inset: 0;
+}
+
+.timetable-events {
+  pointer-events: none;
+}
+
+.timetable-event {
+  position: absolute;
+  top: var(--event-top);
+  left: var(--event-left);
+  width: var(--event-width);
+  height: var(--event-height);
+  min-height: var(--timetable-slot-height);
+  z-index: 1;
+  overflow: hidden;
+  padding: 3px;
+  border: 1px solid rgba(33, 37, 41, 0.55);
+  color: #17212f;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.timetable-event span {
+  display: block;
+}
+
+.timetable-event.color-0 {
+  background: #ffd21c;
+}
+
+.timetable-event.color-1 {
+  background: #ffab9a;
+}
+
+.timetable-event.color-2 {
+  background: #b8d9ff;
+}
+
+.timetable-event.color-3 {
+  background: #c9efad;
+}
+
+.timetable-event.color-4 {
+  background: #e0c4ff;
+}
+
+.timetable-event.color-5 {
+  background: #ffcfaa;
 }
 
 .schedule-list strong {
@@ -407,5 +496,16 @@ select {
 
   .button {
     width: 100%;
+  }
+
+  .timetable-grid {
+    --timetable-slot-height: 44px;
+    --timetable-day-height: 702px;
+    grid-template-columns: 92px repeat(7, minmax(112px, 1fr));
+    min-width: 0;
+  }
+
+  .timetable-event {
+    font-size: 0.66rem;
   }
 }
